@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Customer Manage</title>
+    <title>SPA POS System</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -41,25 +41,33 @@
       <h3 class="m-0">Customer Manage</h3>
       <ul class="nav">
         <li class="nav-item">
-          <a id="home-btn" class="nav-link active border rounded mx-1" href="#">Home</a>
+          <a id="home-btn" class="nav-link active border rounded mx-1" href="#"
+            >Home</a
+          >
         </li>
         <li class="nav-item">
-          <a id="customer-btn" class="nav-link border rounded mx-1" href="#">Customer</a>
+          <a id="customer-btn" class="nav-link border rounded mx-1" href="#"
+            >Customer</a
+          >
         </li>
         <li class="nav-item">
-          <a id="item-btn" class="nav-link border rounded mx-1" href="#">Item</a>
+          <a id="item-btn" class="nav-link border rounded mx-1" href="#"
+            >Item</a
+          >
         </li>
         <li class="nav-item">
-          <a id="order-btn" class="nav-link border rounded mx-1" href="#">Orders</a>
+          <a id="order-btn" class="nav-link border rounded mx-1" href="#"
+            >Orders</a
+          >
         </li>
       </ul>
     </div>
 
-    <!-- Main Content -->
+    <!-- customer page -->
     <div id="customer" class="container mt-4">
       <h4>Customer Registraion</h4>
       <div class="row">
-        <!-- Form Section -->
+        <!--customer Form Section -->
         <form class="col-md-5 form-section" id="customer-form">
           <div>
             <label for="customerId" class="form-label">Customer ID</label>
@@ -79,22 +87,42 @@
             <input type="text" id="customer-salary" class="form-control" />
 
             <div class="d-flex flex-wrap gap-2 mt-2">
-              <button id="btn-save-customer" type="button" class="btn btn-primary">
+              <button
+                id="btn-save-customer"
+                type="button"
+                class="btn btn-primary"
+              >
                 Save Customer
               </button>
-              <button id="btn-customer-delete" type="button" class="btn btn-danger">Remove</button>
-              <button id="btn-customer-update" type="button" class="btn btn-warning text-white">
+              <button
+                id="btn-customer-delete"
+                type="button"
+                class="btn btn-danger"
+              >
+                Remove
+              </button>
+              <button
+                id="btn-customer-update"
+                type="button"
+                class="btn btn-warning text-white"
+              >
                 Update
               </button>
-              <button type="button" class="btn btn-success">Get All</button>
-              <button type="button" class="btn btn-outline-danger">
+              <button id="btn-get-all" type="button" class="btn btn-success">
+                Get All
+              </button>
+              <button
+                id="btn-clear-all"
+                type="button"
+                class="btn btn-outline-danger"
+              >
                 Clear All
               </button>
             </div>
           </div>
         </form>
 
-        <!-- Table Section -->
+        <!--customer Table Section -->
         <div class="col-md-7">
           <table id="customer-table" class="table table-bordered mt-3 mt-md-0">
             <thead>
@@ -123,9 +151,94 @@
         </div>
       </div>
     </div>
+
+    <!-- Item Page -->
+    <div id="item" class="container mt-4">
+      <h3>Item Form</h3>
+      <div class="row">
+        <!--item Form Section -->
+        <div class="col-md-5">
+          <form id="item-form">
+            <div class="mb-3">
+              <label for="item-code" class="form-label">Item Code</label>
+              <input type="text" class="form-control" id="item-code" required />
+              <div class="invalid-feedback">
+                Item Code is a required field • Pattern: I00-000
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="item-name" class="form-label">Item Name</label>
+              <input type="text" class="form-control" id="item-name" required />
+            </div>
+            <div class="mb-3">
+              <label for="item-qty" class="form-label">Item Qty</label>
+              <input
+                type="number"
+                class="form-control"
+                id="item-qty"
+                required
+              />
+            </div>
+            <div class="mb-3">
+              <label for="item-price" class="form-label">Unit Price</label>
+              <input
+                type="number"
+                class="form-control"
+                id="item-price"
+                required
+              />
+            </div>
+            <div class="mb-3 d-flex gap-2">
+              <button id="btn-save-item" type="button" class="btn btn-primary">Add Item</button>
+              <button id="btn-remove-item" type="button" class="btn btn-danger">Remove</button>
+              <button id="btn-update-item" type="button" class="btn btn-warning">Update</button>
+              <button id="btn-get-all-item" type="button" class="btn btn-success">Get All</button>
+              <button id="btn-clear-all-item" type="button" class="btn btn-secondary">Clear All</button>
+            </div>
+          </form>
+        </div>
+
+        <!--item Table Section -->
+        <div class="col-md-7">
+          <table class="table table-bordered mt-3">
+            <thead>
+              <tr>
+                <th>Item Code</th>
+                <th>Item Name</th>
+                <th>Item Qty</th>
+                <th>Item Price</th>
+              </tr>
+            </thead>
+            <tbody id="item-table-body">
+              <tr>
+                <td>I00-001</td>
+                <td>Lux Bundle</td>
+                <td>100</td>
+                <td>48</td>
+              </tr>
+              <tr>
+                <td>I00-002</td>
+                <td>Saman</td>
+                <td>300</td>
+                <td>150</td>
+              </tr>
+              <tr>
+                <td>I00-003</td>
+                <td>Anker</td>
+                <td>100</td>
+                <td>340</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/controller/CustomerController.js"></script>
+    <script src="/controller/itemController.js"></script>
     <script src="/controller/index.js"></script>
+    <script src="/db/db.js"></script>
   </body>
 </html>
