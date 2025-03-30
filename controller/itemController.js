@@ -1,4 +1,3 @@
-
 $(document).ready(function () {
   // Function to display error messages
   function showError(inputId, errorMessage) {
@@ -23,6 +22,11 @@ $(document).ready(function () {
 
       itemArray.push(item);
       addToTable(item);
+
+      if (typeof window.loadItems === "function") {
+        window.loadItems();
+      }
+
       $("#item-form")[0].reset();
       $(".is-invalid").removeClass("is-invalid");
       $(".invalid-feedback").remove();
@@ -101,6 +105,10 @@ $(document).ready(function () {
       }
     });
 
+    if (typeof window.loadItems === "function") {
+      window.loadItems();
+    }
+
     $("#item-form")[0].reset();
   });
 
@@ -121,6 +129,10 @@ $(document).ready(function () {
           $(this).find("td").eq(3).text(item.itemPrice);
         }
       });
+
+      if (typeof window.loadItems === "function") {
+        window.loadItems();
+      }
 
       $("#item-form")[0].reset();
     } else {

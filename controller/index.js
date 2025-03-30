@@ -26,6 +26,11 @@ $(document).ready(() => {
     if (typeof window.loadCustomers === "function") {
       window.loadCustomers();
     }
+
+    if (typeof window.loadItems === "function") {
+      window.loadItems();
+    }
+
   });
   $("#item-btn").on("click", (event) => {
     event.preventDefault();
