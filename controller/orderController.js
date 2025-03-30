@@ -170,8 +170,42 @@ $(document).ready(() => {
       total += rowTotal;
     });
     $("#total").text(total.toFixed(2));
-    $("#subtotal").text(total.toFixed(2)); // Assuming no additional charges for now
+    $("#subtotal").text(total.toFixed(2));
   }
+
+  // Event listener for cash input to calculate balance
+  $("#cash").on("input", function () {
+    const cash = parseFloat($(this).val());
+    const subtotal = parseFloat($("#subtotal").text());
+
+    if (!isNaN(cash) && !isNaN(subtotal)) {
+      const balance = cash - subtotal;
+      $("#balance").val(balance.toFixed(2));
+    } else {
+      $("#balance").val("");
+    }
+  });
+
+  // Event listener for discount input to update subtotal
+  $("#discount").on("input", function () {
+    const discount = parseFloat($(this).val());
+    const total = parseFloat($("#total").text());
+
+    if (!isNaN(discount) && discount >= 0 && discount <= 100) {
+      const discountedAmount = (total * discount) / 100;
+      const newSubtotal = total - discountedAmount;
+      $("#subtotal").text(newSubtotal.toFixed(2));
+
+      // Recalculate balance if cash is already entered
+      const cash = parseFloat($("#cash").val());
+      if (!isNaN(cash)) {
+        const balance = cash - newSubtotal;
+        $("#balance").val(balance.toFixed(2));
+      }
+    } else {
+      $("#subtotal").text(total.toFixed(2));
+    }
+  });
 
   //make global access
   window.loadCustomers = loadCustomers;
