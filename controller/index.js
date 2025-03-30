@@ -1,18 +1,24 @@
 $(document).ready(() => {
-  // Show only the "Home" section by default
   $("#home").show();
   $("#customer, #order, #item").hide();
 
-  // Handle Home button click
+  setTimeout(() => {
+    $(".box").addClass("loaded");
+  }, 200);
+
   $("#home-btn").on("click", (event) => {
     event.preventDefault();
     $("#header-text").text("Home");
     $("#home").show();
     $("#customer, #order, #item").hide();
     setActiveButton(this);
+
+    $(".box").removeClass("loaded"); // Reset the animation
+    setTimeout(() => {
+      $(".box").addClass("loaded"); // Reapply the animation
+    }, 200);
   });
 
-  // Handle Customer button click
   $("#customer-btn").on("click", (event) => {
     event.preventDefault();
     $("#header-text").text("Customer Manage");
@@ -22,7 +28,6 @@ $(document).ready(() => {
     setActiveButton(this);
   });
 
-  // Handle Order button click
   $("#order-btn").on("click", (event) => {
     event.preventDefault();
     $("#header-text").text("Order Manage");
@@ -41,7 +46,6 @@ $(document).ready(() => {
     }
   });
 
-  // Handle Item button click
   $("#item-btn").on("click", (event) => {
     event.preventDefault();
     $("#header-text").text("Item Manage");
@@ -52,7 +56,6 @@ $(document).ready(() => {
     setActiveButton(this);
   });
 
-  // Handle Customer Box click
   $("#customer-box").on("click", () => {
     $("#header-text").text("Customer Manage");
     $("#home").hide();
@@ -61,7 +64,6 @@ $(document).ready(() => {
     setActiveButton("#customer-btn");
   });
 
-  // Handle Item Box click
   $("#item-box").on("click", () => {
     $("#header-text").text("Item Manage");
     $("#home").hide();
@@ -70,7 +72,6 @@ $(document).ready(() => {
     setActiveButton("#item-btn");
   });
 
-  // Handle Order Box click
   $("#order-box").on("click", () => {
     $("#header-text").text("Order Manage");
     $("#home").hide();

@@ -45,6 +45,26 @@
         background-color: #dc3545;
         color: white;
       }
+
+      .box {
+        border: 2px solid #007bff;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        opacity: 0;
+        transform: scale(0.9);
+      }
+
+      .box.loaded {
+        opacity: 1;
+        transform: scale(1);
+        transition: transform 0.5s ease, opacity 0.5s ease;
+      }
+
+      .box:hover {
+        transform: scale(1.05);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      }
     </style>
   </head>
   <body>
