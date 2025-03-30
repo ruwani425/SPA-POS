@@ -210,4 +210,81 @@ $(document).ready(() => {
   //make global access
   window.loadCustomers = loadCustomers;
   window.loadItems = loadItems;
+
+  $("#purchaseBtn").on("click", function () {
+    // Collect order details
+    const orderId = $("#orderId").val();
+    const orderDate = $("#date").val();
+    const customerId = $("#order_customerID").val();
+    const orderItems = [];
+
+    // Collect all items from the order table
+    $("#orderTableBody tr").each(function () {
+      const itemCode = $(this).find("td:nth-child(1)").text();
+      const itemName = $(this).find("td:nth-child(2)").text();
+      const itemPrice = parseFloat($(this).find("td:nth-child(3)").text());
+      const quantity = parseInt($(this).find(".quantity").text());
+      const total = parseFloat($(this).find(".total").text());
+
+      orderItems.push({
+        itemCode,
+        itemName,
+        itemPrice,
+        quantity,
+        total,
+      });
+
+      // Update the item quantity in the itemArray
+      const item = itemArray.find((i) => i.itemCode === itemCode);
+      if (item) {
+        item.itemQty -= quantity;
+      }
+    });
+
+    if (orderItems.length === 0) {
+      alert("No items in the order to purchase.");
+      return;
+    }
+
+    // Create the order object
+    const order = {
+      orderId,
+      orderDate,
+      customerId,
+      orderItems,
+      total: parseFloat($("#total").text()),
+      subtotal: parseFloat($("#subtotal").text()),
+    };
+
+    // Store the order in the orderArray
+    orderArray.push(order);
+
+    // Clear the order table
+    $("#orderTableBody").empty();
+
+    // Reset the form fields
+    $("#order_customerID").val("");
+    $("#order_customerName").val("");
+    $("#order_customerSalary").val("");
+    $("#order_customerAddress").val("");
+    $("#total").text("00.0");
+    $("#subtotal").text("00.0");
+    $("#cash").val("");
+    $("#discount").val("");
+    $("#balance").val("");
+
+    // Reset the dropdowns to default values
+    $("#select-customer").val("");
+    $("#select-item").val("");
+
+    // Generate a new order ID
+    generateOrderID();
+
+    // Reload the items dropdown to reflect updated quantities
+    if (typeof window.loadItems === "function") {
+      window.loadItems();
+    }
+
+    alert("Order placed successfully!");
+  });
 });
