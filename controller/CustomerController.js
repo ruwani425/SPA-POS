@@ -1,7 +1,4 @@
-
-$(document).ready(function () {
-
-  //show error function
+$(document).ready(() => {
   function showError(inputId, errorMessage) {
     $(inputId).removeClass("is-invalid");
     $(inputId).next(".invalid-feedback").remove();
@@ -11,11 +8,11 @@ $(document).ready(function () {
   }
 
   //customer save function
-  $("#btn-save-customer").on("click", function (event) {
+  $("#btn-save-customer").on("click", (event) => {
     event.preventDefault();
 
     if (isValidated()) {
-      let customer = {
+      const customer = {
         customerId: $("#customer-id").val(),
         customerName: $("#customer-name").val(),
         customerAddress: $("#customer-address").val(),
@@ -23,6 +20,12 @@ $(document).ready(function () {
       };
       customerArray.push(customer);
       addToTable(customer);
+
+      // Call loadCustomers to update the dropdown in the order form
+      if (typeof window.loadCustomers === "function") {
+        window.loadCustomers();
+      }
+
       $("#customer-form")[0].reset();
       $(".is-invalid").removeClass("is-invalid");
       $(".invalid-feedback").remove();
@@ -30,10 +33,10 @@ $(document).ready(function () {
 
     // Validation function
     function isValidated() {
-      let customerId = $("#customer-id").val();
-      let customerName = $("#customer-name").val();
-      let customerAddress = $("#customer-address").val();
-      let customerSalary = $("#customer-salary").val();
+      const customerId = $("#customer-id").val();
+      const customerName = $("#customer-name").val();
+      const customerAddress = $("#customer-address").val();
+      const customerSalary = $("#customer-salary").val();
       let isValid = true;
 
       if (customerId === "") {
@@ -68,7 +71,7 @@ $(document).ready(function () {
 
   // Function to add customer to the table
   function addToTable(customer) {
-    let tableRow = `<tr>
+    const tableRow = `<tr>
               <td>${customer.customerId}</td>
               <td>${customer.customerName}</td>
               <td>${customer.customerAddress}</td>
@@ -79,9 +82,9 @@ $(document).ready(function () {
   }
 
   // Function to delete table row
-  $("#btn-customer-delete").on("click", function (event) {
+  $("#btn-customer-delete").on("click", (event) => {
     event.preventDefault();
-    let customerId = $("#customer-id").val();
+    const customerId = $("#customer-id").val();
     if (customerId === "") {
       alert("Customer ID is required to delete.");
       return;
@@ -95,21 +98,26 @@ $(document).ready(function () {
       }
     });
 
+    // Update the customer dropdown after deletion
+    if (typeof window.loadCustomers === "function") {
+      window.loadCustomers();
+    }
+
     $("#customer-form")[0].reset();
   });
 
   // Function to update table row
-  $("#btn-customer-update").on("click", function (event) {
+  $("#btn-customer-update").on("click", (event) => {
     event.preventDefault();
-    let customerId = $("#customer-id").val();
-    let customer = customerArray.find((c) => c.customerId === customerId);
-  
+    const customerId = $("#customer-id").val();
+    const customer = customerArray.find((c) => c.customerId === customerId);
+
     if (customer) {
       // Update the object in array
       customer.customerName = $("#customer-name").val();
       customer.customerAddress = $("#customer-address").val();
       customer.customerSalary = $("#customer-salary").val();
-  
+
       // Update the row in the table
       $("#customer-table-body tr").each(function () {
         if ($(this).find("td").eq(0).text() === customerId) {
@@ -118,26 +126,30 @@ $(document).ready(function () {
           $(this).find("td").eq(3).text(customer.customerSalary);
         }
       });
-  
+
+      // Update the customer dropdown after update
+      if (typeof window.loadCustomers === "function") {
+        window.loadCustomers();
+      }
+
       $("#customer-form")[0].reset();
     } else {
       alert("Customer ID not found.");
     }
   });
 
-
   //clear text feilds
-  $("#btn-clear-all").on("click", function (event) {
+  $("#btn-clear-all").on("click", (event) => {
     event.preventDefault();
     $("#customer-form")[0].reset();
   });
-  
+
   //table row click event
   $("#customer-table-body").on("click", "tr", function () {
-    let customerId = $(this).find("td").eq(0).text();
-    let customerName = $(this).find("td").eq(1).text();
-    let customerAddress = $(this).find("td").eq(2).text();
-    let customerSalary = $(this).find("td").eq(3).text();
+    const customerId = $(this).find("td").eq(0).text();
+    const customerName = $(this).find("td").eq(1).text();
+    const customerAddress = $(this).find("td").eq(2).text();
+    const customerSalary = $(this).find("td").eq(3).text();
 
     $("#customer-id").val(customerId);
     $("#customer-name").val(customerName);
