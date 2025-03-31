@@ -131,7 +131,6 @@ $(document).ready(() => {
     // Check if the item already exists in the table
     const existingRow = $(`#orderTableBody tr[data-item-code="${itemCode}"]`);
     if (existingRow.length > 0) {
-      // Update the existing row
       const existingQty = parseInt(existingRow.find(".quantity").text());
       const newQty = existingQty + orderQuantity;
       const newTotal = itemPrice * newQty;
@@ -139,7 +138,6 @@ $(document).ready(() => {
       existingRow.find(".quantity").text(newQty);
       existingRow.find(".total").text(newTotal.toFixed(2));
     } else {
-      // Add a new row to the table
       const newRow = `
             <tr data-item-code="${itemCode}">
                 <td>${itemCode}</td>
@@ -212,11 +210,19 @@ $(document).ready(() => {
   window.loadItems = loadItems;
 
   $("#purchaseBtn").on("click", function () {
-    // Collect order details
     const orderId = $("#orderId").val();
     const orderDate = $("#date").val();
     const customerId = $("#order_customerID").val();
     const orderItems = [];
+    const subtotal = parseFloat($("#subtotal").text());
+    const cash = parseFloat($("#cash").val());
+
+    if (isNaN(cash) || cash < subtotal) {
+      alert(
+        "Insufficient cash. Please enter an amount equal to or greater than the subtotal."
+      );
+      return;
+    }
 
     // Collect all items from the order table
     $("#orderTableBody tr").each(function () {
@@ -246,23 +252,19 @@ $(document).ready(() => {
       return;
     }
 
-    // Create the order object
     const order = {
       orderId,
       orderDate,
       customerId,
       orderItems,
       total: parseFloat($("#total").text()),
-      subtotal: parseFloat($("#subtotal").text()),
+      subtotal,
     };
 
-    // Store the order in the orderArray
     orderArray.push(order);
 
-    // Clear the order table
     $("#orderTableBody").empty();
 
-    // Reset the form fields
     $("#order_customerID").val("");
     $("#order_customerName").val("");
     $("#order_customerSalary").val("");
@@ -273,11 +275,9 @@ $(document).ready(() => {
     $("#discount").val("");
     $("#balance").val("");
 
-    // Reset the dropdowns to default values
     $("#select-customer").val("");
     $("#select-item").val("");
 
-    // Generate a new order ID
     generateOrderID();
 
     // Reload the items dropdown to reflect updated quantities
