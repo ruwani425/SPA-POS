@@ -253,9 +253,6 @@
             <div class="mb-3">
               <label for="item-code" class="form-label">Item Code</label>
               <input type="text" class="form-control" id="item-code" required />
-              <div class="invalid-feedback">
-                Item Code is a required field • Pattern: I00-000
-              </div>
             </div>
             <div class="mb-3">
               <label for="item-name" class="form-label">Item Name</label>
@@ -273,7 +270,7 @@
             <div class="mb-3">
               <label for="item-price" class="form-label">Unit Price</label>
               <input
-                type="number"
+                type="text"
                 class="form-control"
                 id="item-price"
                 required
@@ -282,23 +279,6 @@
             <div class="mb-3 d-flex gap-2">
               <button id="btn-save-item" type="button" class="btn btn-primary">
                 Add Item
-              </button>
-              <button id="btn-remove-item" type="button" class="btn btn-danger">
-                Remove
-              </button>
-              <button
-                id="btn-update-item"
-                type="button"
-                class="btn btn-warning"
-              >
-                Update
-              </button>
-              <button
-                id="btn-get-all-item"
-                type="button"
-                class="btn btn-success"
-              >
-                Get All
               </button>
               <button
                 id="btn-clear-all-item"

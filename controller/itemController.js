@@ -1,12 +1,62 @@
 $(document).ready(function () {
   // Function to display error messages
   function showError(inputId, errorMessage) {
-    $(inputId).removeClass("is-invalid");
+    $(inputId).removeClass("is-valid").addClass("is-invalid");
     $(inputId).next(".invalid-feedback").remove();
-
-    $(inputId).addClass("is-invalid");
     $(inputId).after(`<div class="invalid-feedback">${errorMessage}</div>`);
   }
+
+  // Function to clear error messages
+  function clearError(inputId) {
+    $(inputId).removeClass("is-invalid").addClass("is-valid");
+    $(inputId).next(".invalid-feedback").remove();
+  }
+
+  // Real-time validation for Item Code
+  $("#item-code").on("input", function () {
+    const itemCode = $(this).val();
+    const itemCodePattern = /^I\d{2}-\d{3}$/;
+    if (!itemCode || !itemCodePattern.test(itemCode)) {
+      showError(this, "Item Code is a required field: Pattern I00-000");
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Real-time validation for Item Name
+  $("#item-name").on("input", function () {
+    const itemName = $(this).val();
+    const itemNamePattern = /^[a-zA-Z\s]{5,20}$/;
+    if (!itemName || !itemNamePattern.test(itemName)) {
+      showError(
+        this,
+        "Item Name is a required field: Minimum 5, Max 20, spaces allowed"
+      );
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Real-time validation for Item Quantity
+  $("#item-qty").on("input", function () {
+    const itemQty = $(this).val();
+    if (!itemQty || isNaN(itemQty) || itemQty <= 0) {
+      showError(this, "Item Quantity is a required field: Only numbers");
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Real-time validation for Item Price
+  $("#item-price").on("input", function () {
+    const itemPrice = $(this).val();
+    const itemPricePattern = /^\d+(\.\d{2})?$/;
+    if (!itemPrice || !itemPricePattern.test(itemPrice)) {
+      showError(this, "Item Price is a required field: Pattern 100.00 or 100");
+    } else {
+      clearError(this);
+    }
+  });
 
   // Item Save Function
   $("#btn-save-item").on("click", function (event) {
@@ -29,41 +79,27 @@ $(document).ready(function () {
 
       $("#item-form")[0].reset();
       $(".is-invalid").removeClass("is-invalid");
-      $(".invalid-feedback").remove();
-    }
-
-    function isValidated() {
-      let itemCode = $("#item-code").val();
-      let itemName = $("#item-name").val();
-      let itemQty = $("#item-qty").val();
-      let itemPrice = $("#item-price").val();
-      let isValid = true;
-
-      if (itemCode === "") {
-        showError("#item-code", "Item Code is required.");
-        isValid = false;
-      }
-      if (itemName === "") {
-        showError("#item-name", "Item Name is required.");
-        isValid = false;
-      }
-      if (itemQty === "" || itemQty <= 0) {
-        showError("#item-qty", "Valid Quantity is required.");
-        isValid = false;
-      }
-      if (itemPrice === "" || itemPrice <= 0) {
-        showError("#item-price", "Valid Price is required.");
-        isValid = false;
-      }
-
-      if (itemArray.some((item) => item.itemCode === itemCode)) {
-        showError("#item-code", "Item Code already exists.");
-        isValid = false;
-      }
-
-      return isValid;
+      $(".is-valid").removeClass("is-valid");
     }
   });
+
+  // Validation Function
+  function isValidated() {
+    let isValid = true;
+
+    // Trigger validation for all fields
+    $("#item-code").trigger("input");
+    $("#item-name").trigger("input");
+    $("#item-qty").trigger("input");
+    $("#item-price").trigger("input");
+
+    // Check if any field has the "is-invalid" class
+    if ($(".is-invalid").length > 0) {
+      isValid = false;
+    }
+
+    return isValid;
+  }
 
   // Function to add item to the table
   function addToTable(item) {
@@ -79,6 +115,9 @@ $(document).ready(function () {
   // Clear all form inputs
   $("#btn-clear-all-item").on("click", function () {
     $("#item-form")[0].reset();
+    $(".is-invalid").removeClass("is-invalid");
+    $(".is-valid").removeClass("is-valid");
+    $(".invalid-feedback").remove();
   });
 
   // Table row click event for editing
