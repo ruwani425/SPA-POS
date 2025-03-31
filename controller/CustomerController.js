@@ -1,14 +1,73 @@
 $(document).ready(() => {
-  function showError(inputId, errorMessage) {
-    $(inputId).removeClass("is-invalid");
-    $(inputId).next(".invalid-feedback").remove();
+  let customerArray = []; // Array to store customers
 
-    $(inputId).addClass("is-invalid");
+  // Function to display error messages
+  function showError(inputId, errorMessage) {
+    $(inputId).removeClass("is-valid").addClass("is-invalid");
+    $(inputId).next(".invalid-feedback").remove();
     $(inputId).after(`<div class="invalid-feedback">${errorMessage}</div>`);
   }
 
-  //customer save function
-  $("#btn-save-customer").on("click", (event) => {
+  // Function to clear error messages
+  function clearError(inputId) {
+    $(inputId).removeClass("is-invalid").addClass("is-valid");
+    $(inputId).next(".invalid-feedback").remove();
+  }
+
+  // Real-time validation for Customer ID
+  $("#customer-id").on("input", function () {
+    const customerId = $(this).val();
+    const customerIdPattern = /^C\d{2}-\d{3}$/;
+    if (!customerId || !customerIdPattern.test(customerId)) {
+      showError(this, "Customer ID is a required field: Pattern C00-000");
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Real-time validation for Customer Name
+  $("#customer-name").on("input", function () {
+    const customerName = $(this).val();
+    const customerNamePattern = /^[a-zA-Z\s]{5,20}$/;
+    if (!customerName || !customerNamePattern.test(customerName)) {
+      showError(
+        this,
+        "Customer Name is a required field: Minimum 5, Max 20, spaces allowed"
+      );
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Real-time validation for Customer Address
+  $("#customer-address").on("input", function () {
+    const customerAddress = $(this).val();
+    if (!customerAddress || customerAddress.length < 5) {
+      showError(
+        this,
+        "Customer Address is a required field: Minimum 5 characters"
+      );
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Real-time validation for Customer Salary
+  $("#customer-salary").on("input", function () {
+    const customerSalary = $(this).val();
+    const customerSalaryPattern = /^\d+(\.\d{2})?$/;
+    if (!customerSalary || !customerSalaryPattern.test(customerSalary)) {
+      showError(
+        this,
+        "Customer Salary is a required field: Pattern 100.00 or 100"
+      );
+    } else {
+      clearError(this);
+    }
+  });
+
+  // Save Customer
+  $("#btn-save-customer").on("click", function (event) {
     event.preventDefault();
 
     if (isValidated()) {
@@ -18,6 +77,7 @@ $(document).ready(() => {
         customerAddress: $("#customer-address").val(),
         customerSalary: $("#customer-salary").val(),
       };
+
       customerArray.push(customer);
       addToTable(customer);
 
@@ -28,46 +88,27 @@ $(document).ready(() => {
 
       $("#customer-form")[0].reset();
       $(".is-invalid").removeClass("is-invalid");
-      $(".invalid-feedback").remove();
-    }
-
-    // Validation function
-    function isValidated() {
-      const customerId = $("#customer-id").val();
-      const customerName = $("#customer-name").val();
-      const customerAddress = $("#customer-address").val();
-      const customerSalary = $("#customer-salary").val();
-      let isValid = true;
-
-      if (customerId === "") {
-        showError("#customer-id", "Customer ID is required.");
-        isValid = false;
-      }
-      if (customerName === "") {
-        showError("#customer-name", "Customer Name is required.");
-        isValid = false;
-      }
-      if (customerAddress === "") {
-        showError("#customer-address", "Customer Address is required.");
-        isValid = false;
-      }
-      if (customerSalary === "") {
-        showError("#customer-salary", "Customer Salary is required.");
-        isValid = false;
-      } else if (isNaN(customerSalary)) {
-        showError("#customer-salary", "Salary must be a number.");
-        isValid = false;
-      } else if (customerSalary < 0) {
-        showError("#customer-salary", "Salary must be a positive number.");
-        isValid = false;
-      }
-      if (customerArray.some((c) => c.customerId === customerId)) {
-        showError("#customer-id", "Customer ID already exists.");
-        isValid = false;
-      }
-      return isValid;
+      $(".is-valid").removeClass("is-valid");
     }
   });
+
+  // Validation Function
+  function isValidated() {
+    let isValid = true;
+
+    // Trigger validation for all fields
+    $("#customer-id").trigger("input");
+    $("#customer-name").trigger("input");
+    $("#customer-address").trigger("input");
+    $("#customer-salary").trigger("input");
+
+    // Check if any field has the "is-invalid" class
+    if ($(".is-invalid").length > 0) {
+      isValid = false;
+    }
+
+    return isValid;
+  }
 
   // Function to add customer to the table
   function addToTable(customer) {
@@ -142,6 +183,9 @@ $(document).ready(() => {
   $("#btn-clear-all").on("click", (event) => {
     event.preventDefault();
     $("#customer-form")[0].reset();
+    $(".is-invalid").removeClass("is-invalid");
+    $(".is-valid").removeClass("is-valid");
+    $(".invalid-feedback").remove();
   });
 
   //table row click event
