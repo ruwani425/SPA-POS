@@ -1,5 +1,4 @@
 $(document).ready(() => {
-  let customerArray = []; // Array to store customers
 
   // Function to display error messages
   function showError(inputId, errorMessage) {
@@ -80,7 +79,7 @@ $(document).ready(() => {
 
       if (existingCustomer) {
         alert("Customer ID already exists. Please use a different ID.");
-        return; // Stop further execution
+        return;
       }
 
       const customer = {
@@ -118,7 +117,7 @@ $(document).ready(() => {
 
       if (!customer) {
         alert("Customer ID not found. Please add the customer first.");
-        return; // Stop further execution
+        return;
       }
 
       // Update the customer details

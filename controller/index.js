@@ -13,9 +13,9 @@ $(document).ready(() => {
     $("#customer, #order, #item").hide();
     setActiveButton(this);
 
-    $(".box").removeClass("loaded"); // Reset the animation
+    $(".box").removeClass("loaded");
     setTimeout(() => {
-      $(".box").addClass("loaded"); // Reapply the animation
+      $(".box").addClass("loaded");
     }, 200);
   });
 

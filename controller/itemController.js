@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  let itemArray = []; // Array to store items
 
   // Function to display error messages
   function showError(inputId, errorMessage) {
@@ -65,8 +64,18 @@ $(document).ready(function () {
     event.preventDefault();
 
     if (isValidated()) {
-      let item = {
-        itemCode: $("#item-code").val(),
+      const itemCode = $("#item-code").val();
+
+      // Check if the item ID already exists
+      const existingItem = itemArray.find((item) => item.itemCode === itemCode);
+
+      if (existingItem) {
+        alert("Item ID already exists. Please use a different ID.");
+        return;
+      }
+
+      const item = {
+        itemCode: itemCode,
         itemName: $("#item-name").val(),
         itemQty: $("#item-qty").val(),
         itemPrice: $("#item-price").val(),
@@ -104,15 +113,26 @@ $(document).ready(function () {
   });
 
   // Update Item
-  $("#btn-update-item").on("click", function () {
-    let itemCode = $("#item-code").val();
-    let item = itemArray.find((item) => item.itemCode === itemCode);
+  $("#btn-update-item").on("click", function (event) {
+    event.preventDefault();
 
-    if (item) {
+    if (isValidated()) {
+      const itemCode = $("#item-code").val();
+
+      // Check if the item ID exists in the array
+      const item = itemArray.find((item) => item.itemCode === itemCode);
+
+      if (!item) {
+        alert("Item ID not found. Please add the item first.");
+        return;
+      }
+
+      // Update the item details
       item.itemName = $("#item-name").val();
       item.itemQty = $("#item-qty").val();
       item.itemPrice = $("#item-price").val();
 
+      // Update the row in the table
       $("#item-table-body tr").each(function () {
         if ($(this).find("td").eq(0).text() === itemCode) {
           $(this).find("td").eq(1).text(item.itemName);
@@ -126,8 +146,6 @@ $(document).ready(function () {
       }
 
       $("#item-form")[0].reset();
-    } else {
-      alert("Item not found.");
     }
   });
 
@@ -159,12 +177,12 @@ $(document).ready(function () {
 
   // Function to add item to the table
   function addToTable(item) {
-    let tableRow = `<tr>
-            <td>${item.itemCode}</td>
-            <td>${item.itemName}</td>
-            <td>${item.itemQty}</td>
-            <td>${item.itemPrice}</td>
-        </tr>`;
+    const tableRow = `<tr>
+              <td>${item.itemCode}</td>
+              <td>${item.itemName}</td>
+              <td>${item.itemQty}</td>
+              <td>${item.itemPrice}</td>
+          </tr>`;
     $("#item-table-body").append(tableRow);
   }
 
@@ -178,10 +196,10 @@ $(document).ready(function () {
 
   // Table row click event for editing
   $("#item-table-body").on("click", "tr", function () {
-    let itemCode = $(this).find("td").eq(0).text();
-    let itemName = $(this).find("td").eq(1).text();
-    let itemQty = $(this).find("td").eq(2).text();
-    let itemPrice = $(this).find("td").eq(3).text();
+    const itemCode = $(this).find("td").eq(0).text();
+    const itemName = $(this).find("td").eq(1).text();
+    const itemQty = $(this).find("td").eq(2).text();
+    const itemPrice = $(this).find("td").eq(3).text();
 
     $("#item-code").val(itemCode);
     $("#item-name").val(itemName);
