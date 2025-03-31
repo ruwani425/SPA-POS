@@ -1,4 +1,6 @@
 $(document).ready(function () {
+  let itemArray = []; // Array to store items
+
   // Function to display error messages
   function showError(inputId, errorMessage) {
     $(inputId).removeClass("is-valid").addClass("is-invalid");
@@ -58,7 +60,7 @@ $(document).ready(function () {
     }
   });
 
-  // Item Save Function
+  // Add Item
   $("#btn-save-item").on("click", function (event) {
     event.preventDefault();
 
@@ -81,6 +83,60 @@ $(document).ready(function () {
       $(".is-invalid").removeClass("is-invalid");
       $(".is-valid").removeClass("is-valid");
     }
+  });
+
+  // Remove Item
+  $("#btn-remove-item").on("click", function () {
+    let itemCode = $("#item-code").val();
+    itemArray = itemArray.filter((item) => item.itemCode !== itemCode);
+
+    $("#item-table-body tr").each(function () {
+      if ($(this).find("td").eq(0).text() === itemCode) {
+        $(this).remove();
+      }
+    });
+
+    if (typeof window.loadItems === "function") {
+      window.loadItems();
+    }
+
+    $("#item-form")[0].reset();
+  });
+
+  // Update Item
+  $("#btn-update-item").on("click", function () {
+    let itemCode = $("#item-code").val();
+    let item = itemArray.find((item) => item.itemCode === itemCode);
+
+    if (item) {
+      item.itemName = $("#item-name").val();
+      item.itemQty = $("#item-qty").val();
+      item.itemPrice = $("#item-price").val();
+
+      $("#item-table-body tr").each(function () {
+        if ($(this).find("td").eq(0).text() === itemCode) {
+          $(this).find("td").eq(1).text(item.itemName);
+          $(this).find("td").eq(2).text(item.itemQty);
+          $(this).find("td").eq(3).text(item.itemPrice);
+        }
+      });
+
+      if (typeof window.loadItems === "function") {
+        window.loadItems();
+      }
+
+      $("#item-form")[0].reset();
+    } else {
+      alert("Item not found.");
+    }
+  });
+
+  // Get All Items
+  $("#btn-get-all-item").on("click", function () {
+    $("#item-table-body").empty();
+    itemArray.forEach((item) => {
+      addToTable(item);
+    });
   });
 
   // Validation Function
@@ -131,51 +187,5 @@ $(document).ready(function () {
     $("#item-name").val(itemName);
     $("#item-qty").val(itemQty);
     $("#item-price").val(itemPrice);
-  });
-
-  // Remove item
-  $("#btn-remove-item").on("click", function () {
-    let itemCode = $("#item-code").val();
-    itemArray = itemArray.filter((item) => item.itemCode !== itemCode);
-
-    $("#item-table-body tr").each(function () {
-      if ($(this).find("td").eq(0).text() === itemCode) {
-        $(this).remove();
-      }
-    });
-
-    if (typeof window.loadItems === "function") {
-      window.loadItems();
-    }
-
-    $("#item-form")[0].reset();
-  });
-
-  // Update item
-  $("#btn-update-item").on("click", function () {
-    let itemCode = $("#item-code").val();
-    let item = itemArray.find((item) => item.itemCode === itemCode);
-
-    if (item) {
-      item.itemName = $("#item-name").val();
-      item.itemQty = $("#item-qty").val();
-      item.itemPrice = $("#item-price").val();
-
-      $("#item-table-body tr").each(function () {
-        if ($(this).find("td").eq(0).text() === itemCode) {
-          $(this).find("td").eq(1).text(item.itemName);
-          $(this).find("td").eq(2).text(item.itemQty);
-          $(this).find("td").eq(3).text(item.itemPrice);
-        }
-      });
-
-      if (typeof window.loadItems === "function") {
-        window.loadItems();
-      }
-
-      $("#item-form")[0].reset();
-    } else {
-      alert("Item not found.");
-    }
   });
 });
