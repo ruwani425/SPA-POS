@@ -71,8 +71,20 @@ $(document).ready(() => {
     event.preventDefault();
 
     if (isValidated()) {
+      const customerId = $("#customer-id").val();
+
+      // Check if the customer ID already exists
+      const existingCustomer = customerArray.find(
+        (customer) => customer.customerId === customerId
+      );
+
+      if (existingCustomer) {
+        alert("Customer ID already exists. Please use a different ID.");
+        return; // Stop further execution
+      }
+
       const customer = {
-        customerId: $("#customer-id").val(),
+        customerId: customerId,
         customerName: $("#customer-name").val(),
         customerAddress: $("#customer-address").val(),
         customerSalary: $("#customer-salary").val(),
@@ -89,6 +101,46 @@ $(document).ready(() => {
       $("#customer-form")[0].reset();
       $(".is-invalid").removeClass("is-invalid");
       $(".is-valid").removeClass("is-valid");
+    }
+  });
+
+  // Update Customer
+  $("#btn-customer-update").on("click", function (event) {
+    event.preventDefault();
+
+    if (isValidated()) {
+      const customerId = $("#customer-id").val();
+
+      // Check if the customer ID exists in the array
+      const customer = customerArray.find(
+        (customer) => customer.customerId === customerId
+      );
+
+      if (!customer) {
+        alert("Customer ID not found. Please add the customer first.");
+        return; // Stop further execution
+      }
+
+      // Update the customer details
+      customer.customerName = $("#customer-name").val();
+      customer.customerAddress = $("#customer-address").val();
+      customer.customerSalary = $("#customer-salary").val();
+
+      // Update the row in the table
+      $("#customer-table-body tr").each(function () {
+        if ($(this).find("td").eq(0).text() === customerId) {
+          $(this).find("td").eq(1).text(customer.customerName);
+          $(this).find("td").eq(2).text(customer.customerAddress);
+          $(this).find("td").eq(3).text(customer.customerSalary);
+        }
+      });
+
+      // Call loadCustomers to update the dropdown in the order form
+      if (typeof window.loadCustomers === "function") {
+        window.loadCustomers();
+      }
+
+      $("#customer-form")[0].reset();
     }
   });
 
@@ -145,38 +197,6 @@ $(document).ready(() => {
     }
 
     $("#customer-form")[0].reset();
-  });
-
-  // Function to update table row
-  $("#btn-customer-update").on("click", (event) => {
-    event.preventDefault();
-    const customerId = $("#customer-id").val();
-    const customer = customerArray.find((c) => c.customerId === customerId);
-
-    if (customer) {
-      // Update the object in array
-      customer.customerName = $("#customer-name").val();
-      customer.customerAddress = $("#customer-address").val();
-      customer.customerSalary = $("#customer-salary").val();
-
-      // Update the row in the table
-      $("#customer-table-body tr").each(function () {
-        if ($(this).find("td").eq(0).text() === customerId) {
-          $(this).find("td").eq(1).text(customer.customerName);
-          $(this).find("td").eq(2).text(customer.customerAddress);
-          $(this).find("td").eq(3).text(customer.customerSalary);
-        }
-      });
-
-      // Update the customer dropdown after update
-      if (typeof window.loadCustomers === "function") {
-        window.loadCustomers();
-      }
-
-      $("#customer-form")[0].reset();
-    } else {
-      alert("Customer ID not found.");
-    }
   });
 
   //clear text feilds
