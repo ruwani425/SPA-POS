@@ -74,7 +74,7 @@ $(document).ready(function () {
         return;
       }
 
-      const item = {
+      item = {
         itemCode: itemCode,
         itemName: $("#item-name").val(),
         itemQty: $("#item-qty").val(),

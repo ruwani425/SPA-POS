@@ -82,7 +82,7 @@ $(document).ready(() => {
         return;
       }
 
-      const customer = {
+      customer = {
         customerId: customerId,
         customerName: $("#customer-name").val(),
         customerAddress: $("#customer-address").val(),
